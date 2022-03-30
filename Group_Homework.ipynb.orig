@@ -181,15 +181,47 @@
    "metadata": {},
    "outputs": [
     {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local <modified: text/plain>\n"
+     ]
+    },
+    {
      "data": {
       "text/plain": [
-       "[<matplotlib.lines.Line2D at 0x7f34cef3d550>,\n",
-       " <matplotlib.lines.Line2D at 0x7f34cef3d580>]"
+       "[<matplotlib.lines.Line2D at 0x7f1d9e8dff10>,\n",
+       " <matplotlib.lines.Line2D at 0x7f1d9e8dff70>]"
       ]
      },
      "execution_count": 39,
      "metadata": {},
      "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x7f5524273940>,\n",
+       " <matplotlib.lines.Line2D at 0x7f5524265790>]"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote <modified: text/plain>\n"
+     ]
     },
     {
      "data": {
@@ -771,6 +803,14 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "263aeeac",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\">**<<<<<<< local**</span>"
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": 30,
    "id": "legislative-substance",
@@ -789,6 +829,65 @@
     "    u_t0=u_t1.copy()\n",
     "    return u_new\n",
     "        #How can we apply a corrector to this solution?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8ea2271e",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\">**=======**</span>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "8b3e9f70",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "cannot assign to operator (2935654117.py, line 16)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;36m  File \u001b[0;32m\"/tmp/ipykernel_74294/2935654117.py\"\u001b[0;36m, line \u001b[0;32m16\u001b[0m\n\u001b[0;31m    (u_new[1:npts] - u_t0[1:npts])/dt = cfl*u_t0[1:npts]\u001b[0m\n\u001b[0m    ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m cannot assign to operator\n"
+     ]
+    }
+   ],
+   "source": [
+    "c = 1\n",
+    "x_left = 0.\n",
+    "x_right = 1.\n",
+    "num_points = 91\n",
+    "dx = (x_right-x_left)/(num_points-1)\n",
+    "dt = .01\n",
+    "cfl = c*dt/dx\n",
+    "\n",
+    "def matsuno(u0, u1, cfl, ntimes=100, npts=101):\n",
+    "    u_new = np.zeros(npts) # u^*\n",
+    "    u_t0 = u0.copy() # u^n\n",
+    "    u_t1 = u1.copy() # u^n+1\n",
+    "    \n",
+    "    for n in range(0,npts):\n",
+    "        for k in range(ntimes):\n",
+    "            (u_new[1:npts] - u_t0[1:npts])/dt = cfl*u_t0[1:npts]\n",
+    "            (u_t1[1:npts] - u_t0[1:npts])/dt = cfl*u_new[1:npts]\n",
+    "            u_new[0] = u_new[-1]\n",
+    "            u_t0=u_new.copy()\n",
+    "            u_t1=u_new.copy()\n",
+    "            return u_new\n",
+    "            \n",
+    "print('c, dt, dx, CFL = ', c, dt, dx, cfl)\n",
+    "ntimes = int((x_right-x_left)/(c*dt))\n",
+    "print('ntimes = ', ntimes)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2548caff",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\">**>>>>>>> remote**</span>"
    ]
   },
   {
